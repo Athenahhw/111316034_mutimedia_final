@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Athena Wang | Portfolio & Game</title>
+    <meta name="description" content="王暄菡 (Athena Wang) 的個人作品集與互動式網頁遊戲">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* --- 1. Portfolio Base Styles --- */
+        :root {
+            --primary-color: #002fa7;
+            --primary-light: #e6ecfa;
+            --accent-color: #0071e3;
+            --text-main: #1d1d1f;
+            --text-secondary: #86868b;
+            --bg-color: #ffffff;
+            --bg-secondary: #f5f5f7;
+            --container-width: 1024px;
+            --header-height: 60px;
+            --border-radius: 12px;
+            --transition-speed: 0.3s;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: var(--text-main);
+            background-color: var(--bg-color);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Portfolio Components */
+        a { text-decoration: none; color: inherit; transition: var(--transition-speed); }
+        ul { list-style: none; }
+        img { max-width: 100%; display: block; border-radius: var(--border-radius); }
+        .container { max-width: var(--container-width); margin: 0 auto; padding: 0 20px; }
+        .section { padding: 80px 0; }
+        .bg-secondary { background-color: var(--bg-secondary); }
+        .section-title {
+            font-size: 2.5rem; font-weight: 700; text-align: center;
+            margin-bottom: 3rem; color: var(--text-main); letter-spacing: -0.02em;
+        }
+        .grid-3 {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;
+        }
+        
+        /* Navbar */
+        .navbar {
+            position: fixed; top: 0; left: 0; width: 100%; height: var(--header-height);
+            background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center;
+        }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: var(--container-width); padding: 0 20px; }
+        .logo { font-size: 1.25rem; font-weight: 600; color: var(--primary-color); }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { font-size: 0.9rem; color: var(--text-secondary); font-weight: 500; }
+        .nav-links a:hover { color: var(--accent-color); }
+        .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; }
+        .bar { width: 25px; height: 2px; background-color: var(--text-main); transition: 0.3s; }
+
+        /* Hero */
+        .hero {
+            height: 100vh; display: flex; align-items: center; justify-content: center;
+            text-align: center; padding-top: var(--header-height);
+            background: radial-gradient(circle at center, #f0f4ff 0%, #ffffff 70%);
+        }
+        .hero-content h1 { font-size: 4rem; font-weight: 700; color: var(--primary-color); margin-bottom: 1rem; line-height: 1.1; }
+        .hero-content p { font-size: 1.5rem; color: var(--text-secondary); margin-bottom: 2rem; }
+        
+        /* Buttons */
+        .btn {
+            display: inline-block; padding: 12px 30px; border-radius: 980px;
+            background-color: var(--primary-color); color: white; font-weight: 500;
+            cursor: pointer; transition: transform 0.2s, background-color 0.2s; border: none;
+        }
+        .btn:hover { background-color: var(--accent-color); transform: translateY(-2px); }
+
+        .profile-img {
+            width: 180px; height: 180px; border-radius: 50%; object-fit: cover;
+            margin-bottom: 2rem; box-shadow: 0 10px 30px rgba(0, 47, 167, 0.15); border: 4px solid white;
+        }
+        .about-card {
+            background: white; padding: 2rem; border-radius: var(--border-radius);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04); transition: transform 0.3s;
+        }
+        .about-card:hover { transform: translateY(-5px); }
+        .about-card h3 { color: var(--primary-color); margin-bottom: 1rem; }
+
+        /* Portfolio Cards */
+        .project-card {
+            background: white; border-radius: var(--border-radius); overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06); transition: transform 0.3s, box-shadow 0.3s;
+            display: flex; flex-direction: column; cursor: pointer; height: 100%; position: relative;
+        }
+        .project-card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.12); }
+        
+        .icon-cover {
+            height: 200px; background: #eef1f8; display: flex; align-items: center; justify-content: center;
+            color: var(--primary-color); transition: background 0.3s, color 0.3s;
+        }
+        .project-card:hover .icon-cover { background: var(--primary-color); color: white; }
+        .icon-cover svg { width: 64px; height: 64px; fill: currentColor; }
+        
+        .project-info { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
+        .project-desc { flex-grow: 1; margin-bottom: 1rem; color: #555; }
+        .project-tags { margin-top: auto; }
+        .tag {
+            display: inline-block; background: var(--primary-light); color: var(--primary-color);
+            padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; margin-right: 5px; font-weight: 500;
+        }
+
+        /* Skills & Contact */
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
+        .skill-item { background: var(--bg-secondary); padding: 1.5rem; border-radius: var(--border-radius); text-align: center; }
+        .skill-item h4 { color: var(--primary-color); margin-bottom: 0.5rem; }
+        .contact-box { background: var(--primary-color); color: white; padding: 4rem 2rem; border-radius: 24px; text-align: center; }
+        .contact-box a { color: #fff; text-decoration: underline; }
+        
+        /* Modal (Portfolio Images) */
+        .modal {
+            display: none; position: fixed; z-index: 2000; left: 0; top: 0;
+            width: 100%; height: 100%; background-color: rgba(0,0,0,0.9);
+            justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s;
+        }
+        .modal.show { opacity: 1; }
+        .modal-content { max-width: 90%; max-height: 90%; border-radius: 8px; }
+        .close-modal { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; }
+
+        footer { text-align: center; padding: 30px 20px; border-top: 1px solid #eee; font-size: 0.9rem; color: var(--text-secondary); }
+        .fade-in-up { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .fade-in-up.visible { opacity: 1; transform: translateY(0); }
+
+        /* --- 2. GAME SPECIFIC STYLES --- */
+        /* 將遊戲樣式隔離在 #game-wrapper 內，避免影響網頁其他部分 */
+        #game-wrapper {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 3000; /* 比 Navbar 和普通 Modal 更高 */
+            background: linear-gradient(to bottom, #87CEFA 0%, #E0F7FA 100%);
+            display: none; /* 預設隱藏 */
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        
+        #game-wrapper.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        #game-wrapper canvas { width: 100%; height: 100%; display: block; }
+
+        /* 遊戲專用 UI */
+        .game-ui-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; display: flex; flex-direction: column; justify-content: space-between;
+            padding: 20px; box-sizing: border-box;
+        }
+
+        .game-hud {
+            display: flex; justify-content: space-between; align-items: center;
+            color: #333; font-weight: bold; font-size: 1.5rem;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
+        }
+
+        /* 遊戲內覆蓋層 (開始/結束畫面) */
+        .game-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: white; z-index: 10; pointer-events: auto; backdrop-filter: blur(8px);
+        }
+        
+        .game-overlay.hidden { display: none !important; }
+
+        /* 遊戲專用按鈕 */
+        .game-btn {
+            background: linear-gradient(45deg, #11998e, #38ef7d);
+            border: none; padding: 15px 40px; color: white; font-size: 1.5rem;
+            border-radius: 50px; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(56, 239, 125, 0.4);
+            font-weight: bold; margin-top: 20px; text-transform: uppercase; letter-spacing: 2px;
+            transition: transform 0.2s;
+        }
+        .game-btn:active { transform: scale(0.95); }
+        
+        .game-overlay h1 { font-size: 3rem; text-shadow: 0 5px 15px rgba(0,0,0,0.5); margin-bottom: 20px; text-align: center; }
+        .game-overlay p { font-size: 1.2rem; max-width: 600px; text-align: center; line-height: 1.6; margin-bottom: 20px; color: #eee; }
+
+        /* 離開遊戲按鈕 */
+        .exit-game-btn {
+            position: absolute; top: 20px; right: 20px; z-index: 50;
+            background: rgba(0,0,0,0.5); color: white; border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 16px; border-radius: 20px; cursor: pointer; pointer-events: auto;
+            font-size: 0.9rem;
+        }
+        .exit-game-btn:hover { background: rgba(255, 0, 0, 0.6); }
+
+        /* 虛擬搖桿 */
+        #joystick-zone {
+            position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%);
+            width: 120px; height: 120px; background: rgba(0, 0, 0, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.5); border-radius: 50%;
+            pointer-events: auto; display: none;
+        }
+        #joystick-knob {
+            position: absolute; top: 50%; left: 50%; width: 40px; height: 40px;
+            background: rgba(255, 255, 255, 0.9); border-radius: 50%;
+            transform: translate(-50%, -50%); pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-links {
+                position: absolute; top: var(--header-height); left: 0; width: 100%;
+                background: white; flex-direction: column; padding: 20px; gap: 20px;
+                text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+                transform: translateY(-150%); transition: transform 0.3s ease-in-out; z-index: 999;
+            }
+            .nav-links.active { transform: translateY(0); }
+            
+            /* 遊戲手機版適配 */
+            #joystick-zone { display: block; }
+            .game-overlay h1 { font-size: 2rem; }
+            .game-btn { padding: 10px 30px; font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">Athena.</a>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+            </div>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#home">首頁</a></li>
+                <li><a href="#about">關於我</a></li>
+                <li><a href="#portfolio">作品集</a></li>
+                <li><a href="#skills">專業技能</a></li>
+                <li><a href="#contact">聯絡我</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header id="home" class="hero">
+        <div class="container hero-content fade-in-up">
+            <img src="assets/image/IMG_6943.JPG" alt="Athena Wang" class="profile-img" onerror="this.src='https://placehold.co/200x200?text=Athena'">
+            <h1>Hello, I'm Athena.</h1>
+            <p>CS Student @ NTUE | Developer | Dreamer</p>
+            <a href="#portfolio" class="btn">View My Work</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="about" class="section">
+            <div class="container">
+                <div class="section-title fade-in-up">About Me</div>
+                <div class="grid-3 fade-in-up">
+                    <div class="about-card">
+                        <h3>🎓 學歷背景</h3>
+                        <p>國立臺北教育大學 資訊科學系<br>(2024 - Present)</p>
+                        <p style="font-size:0.9rem; color:#666; margin-top:8px;">主修程式設計、資料結構與演算法，對 App 開發與前端技術充滿熱情。</p>
+                    </div>
+                    <div class="about-card">
+                        <h3>💡 個人特質</h3>
+                        <p>我是王暄菡 (Athena)，ENTJ 人格特質讓我熱愛挑戰。喜歡哈利波特與漫威電影，這啟發了我對創意的無限想像。</p>
+                    </div>
+                    <div class="about-card">
+                        <h3>🚀 未來目標</h3>
+                        <p>專注提升 Java 與 Web 開發能力，計劃前往美國攻讀 CS 碩士，專攻 AI 或韌體工程。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="portfolio" class="section bg-secondary">
+            <div class="container">
+                <div class="section-title fade-in-up">Portfolio</div>
+                <p style="text-align:center; margin-bottom: 30px; color:var(--text-secondary);">本學期精選專案與過往作品</p>
+                
+                <div class="grid-3">
+                    
+                    <a href="https://youtube.com/shorts/x_UyCo6uRwE?feature=share" target="_blank" class="project-card fade-in-up">
+                        <div class="icon-cover">
+                            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        </div>
+                        <div class="project-info">
+                            <h3>期中報告 Vlog</h3>
+                            <p class="project-desc">點擊觀看我們的期中報告影片。使用 Suno 生成配樂，紀錄四位朋友的一日生活。</p>
+                            <div class="project-tags">
+                                <span class="tag">YouTube</span>
+                                <span class="tag">Vlog</span>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="https://youtu.be/iW419OcUGxA" target="_blank" class="project-card fade-in-up">
+                        <div class="icon-cover">
+                            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        </div>
+                        <div class="project-info">
+                            <h3>快樂小狗狗</h3>
+                            <p class="project-desc">點擊觀看快樂小狗影片，利用Flow AI 製成</p>
+                            <div class="project-tags">
+                                <span class="tag">YouTube</span>
+                                <span class="tag">Puppy</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <div class="project-card fade-in-up" onclick="openGameModal()">
+                        <div class="icon-cover" style="background: linear-gradient(135deg, #87CEEB, #E0F7FA);">
+                            <svg viewBox="0 0 24 24" style="color: #002fa7;">
+                                <path d="M21 9H3c-.6 0-1 .4-1 1v4c0 .6.4 1 1 1h18c.6 0 1-.4 1-1v-4c0-.6-.4-1-1-1zM9 13.5c-.8 0-1.5-.7-1.5-1.5s.7-1.5 1.5-1.5 1.5.7 1.5 1.5-.7 1.5-1.5 1.5zm10 .5h-2v-1h2v1z"/>
+                            </svg>
+                        </div>
+                        <div class="project-info">
+                            <h3>空中極限平衡 3D</h3>
+                            <p class="project-desc">網頁互動小遊戲。挑戰立體視角下的平衡感，躲避障礙物並在風暴中生存！支援鍵盤與觸控。</p>
+                            <div class="project-tags">
+                                <span class="tag">JavaScript</span>
+                                <span class="tag">Canvas Game</span>
+                                <span class="tag">Interactive</span>
+                            </div>
+                            <button class="btn" style="width:100%; margin-top:10px; text-align:center;">開始遊玩</button>
+                        </div>
+                    </div>
+
+                    <div class="project-card fade-in-up" style="grid-column: 1 / -1; cursor: default;">
+                        <div class="project-info" style="padding-bottom: 10px;">
+                            <h3>📄 專題報告 / 履歷預覽</h3>
+                            <p class="project-desc">您可以在此直接閱讀文件，或點擊下方按鈕下載。</p>
+                        </div>
+                        <div style="width: 100%; height: 600px; background: #eef1f8;">
+                            <object data="assets/image/Coursera Google Cybersecurity.pdf" type="application/pdf" width="100%" height="100%" style="border: none;">
+                                <div style="padding: 20px; text-align: center;">
+                                    <p>您的瀏覽器不支援 PDF 預覽。</p>
+                                    <a href="assets/image/Coursera Google Cybersecurity.pdf" class="btn" download>點此下載 PDF</a>
+                                </div>
+                            </object>
+                        </div>
+                        <div class="project-info" style="padding-top: 10px;">
+                            <div class="project-tags">
+                                <span class="tag">PDF Document</span>
+                                <span class="tag">Research</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="section">
+            <div class="container">
+                <div class="section-title fade-in-up">Skills</div>
+                <div class="skills-grid fade-in-up">
+                    <div class="skill-item"><h4>Programming</h4><p>Java, C++, Python</p></div>
+                    <div class="skill-item"><h4>Web Dev</h4><p>HTML5, CSS3</p></div>
+                    <div class="skill-item"><h4>Language</h4><p>Mandarin, English (Fluent), Japanese, Korean</p></div>
+                    <div class="skill-item"><h4>Tools</h4><p>Git, VS Code</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="section">
+            <div class="container fade-in-up">
+                <div class="contact-box">
+                    <h2>Contact Me</h2>
+                    <p>📧 <a href="mailto:hhw051003@gmail.com">hhw051003@gmail.com</a></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Copyright © 2025 Athena Wang.</p>
+        </div>
+    </footer>
+
+    <div id="imageModal" class="modal">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImg">
+    </div>
+
+    <div id="game-wrapper">
+        <button class="exit-game-btn" onclick="closeGameModal()">✕ 結束遊戲</button>
+        <canvas id="gameCanvas"></canvas>
+        
+        <div class="game-ui-layer">
+            <div class="game-hud">
+                <div id="level-display">關卡: 1</div>
+                <div style="display: flex; gap: 20px; align-items: center;">
+                    <div style="font-size: 1.2rem; color: #1e40af; opacity: 0.9;">王暄菡</div>
+                    <div id="time-display">時間: 30s</div>
+                </div>
+            </div>
+            <div id="joystick-zone"><div id="joystick-knob"></div></div>
+        </div>
+
+        <div id="start-screen" class="game-overlay">
+            <h1>空中極限平衡 3D</h1>
+            <p>利用 <b>方向鍵</b> 或 <b>虛擬搖桿</b> 控制。<br>保持平衡，不要掉下去！</p>
+            <button class="game-btn" onclick="startGame()">開始挑戰</button>
+        </div>
+
+        <div id="level-screen" class="game-overlay hidden">
+            <h1>關卡完成！</h1>
+            <p id="level-message">準備進入下一層挑戰...</p>
+            <button class="game-btn" onclick="nextLevel()">下一關</button>
+        </div>
+
+        <div id="game-over-screen" class="game-overlay hidden">
+            <h1 style="color: #ff6b6b;">墜落！</h1>
+            <p id="final-score" class="text-xl text-yellow-300"></p>
+            <button class="game-btn" onclick="restartGame()">重新挑戰</button>
+        </div>
+        
+        <div id="victory-screen" class="game-overlay hidden">
+            <h1 class="text-yellow-400">平衡大師！</h1>
+            <p>你征服了所有高空挑戰！</p>
+            <button class="game-btn" onclick="restartGame()">再次遊玩</button>
+        </div>
+    </div>
+
+    <script>
+        // --- Portfolio Scripts ---
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+        hamburger.addEventListener('click', () => navLinks.classList.toggle('active'));
+        document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navLinks.classList.remove('active')));
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
+
+        // Image Modal
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImg');
+        window.openModal = function(imgSrc) {
+            modal.style.display = "flex";
+            setTimeout(() => modal.classList.add('show'), 10);
+            modalImg.src = imgSrc;
+            document.body.style.overflow = 'hidden';
+        }
+        window.closeModal = function() {
+            modal.classList.remove('show');
+            setTimeout(() => modal.style.display = "none", 300);
+            document.body.style.overflow = 'auto';
+        }
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+
+        // =========================================
+        //            GAME LOGIC SCRIPT
+        // =========================================
+        
+        const gameWrapper = document.getElementById('game-wrapper');
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let gameActive = false; // 控制遊戲迴圈是否執行
+
+        // UI 元素
+        const startScreen = document.getElementById('start-screen');
+        const levelScreen = document.getElementById('level-screen');
+        const gameOverScreen = document.getElementById('game-over-screen');
+        const victoryScreen = document.getElementById('victory-screen');
+        const levelDisplay = document.getElementById('level-display');
+        const timeDisplay = document.getElementById('time-display');
+        const levelMessage = document.getElementById('level-message');
+
+        // 遊戲變數
+        let gameState = 'MENU'; 
+        let animationId;
+        let lastTime = 0;
+        const VIEW_SCALE_Y = 0.6; 
+        const PLATFORM_THICKNESS = 40;
+        
+        const LEVELS = [
+            { duration: 15, platformRadius: 250, windForce: 0, name: "新手平台", spawnRate: 0, obstacleSpeed: 0, type: 'none' },
+            { duration: 20, platformRadius: 230, windForce: 0.2, name: "高空氣流", spawnRate: 0, obstacleSpeed: 0, type: 'none' },
+            { duration: 25, platformRadius: 200, windForce: 0.1, name: "落石警告", spawnRate: 2000, obstacleSpeed: 3, type: 'falling' },
+            { duration: 30, platformRadius: 180, windForce: 0.3, name: "金色追蹤者", spawnRate: 1500, obstacleSpeed: 4, type: 'chaser' },
+            { duration: 35, platformRadius: 160, windForce: 0.6, name: "極限暴風圈", spawnRate: 800, obstacleSpeed: 5, type: 'mixed' }
+        ];
+
+        let currentLevelIndex = 0;
+        let levelTimeRemaining = 0;
+        let obstacleTimer = 0;
+        let platformCenter = { x: 0, y: 0 };
+        
+        const player = { x: 0, y: 0, radius: 15, color: '#FF512F', speed: 0.5, maxSpeed: 6, vx: 0, vy: 0, friction: 0.92 };
+        let obstacles = [];
+        let particles = [];
+        let clouds = [];
+        const keys = { ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false };
+        const joystick = { active: false, x: 0, y: 0 };
+
+        // --- 遊戲控制函數 ---
+
+        window.openGameModal = function() {
+            gameWrapper.classList.add('active');
+            document.body.style.overflow = 'hidden'; // 禁止背景捲動
+            gameActive = true;
+            resizeGame();
+            initClouds();
+            
+            // 重置 UI
+            gameState = 'MENU';
+            startScreen.classList.remove('hidden');
+            levelScreen.classList.add('hidden');
+            gameOverScreen.classList.add('hidden');
+            victoryScreen.classList.add('hidden');
+            
+            // 讓玩家位置歸零
+            player.x = canvas.width / 2;
+            player.y = canvas.height / 2;
+            player.vx = 0; player.vy = 0;
+
+            if (!animationId) loop(0);
+        }
+
+        window.closeGameModal = function() {
+            gameWrapper.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            gameActive = false;
+            cancelAnimationFrame(animationId);
+            animationId = null;
+        }
+
+        function resizeGame() {
+            if(!gameActive) return;
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            platformCenter.x = canvas.width / 2;
+            platformCenter.y = canvas.height / 2;
+            if(gameState === 'MENU') {
+                player.x = canvas.width / 2;
+                player.y = canvas.height / 2;
+            }
+        }
+        window.addEventListener('resize', resizeGame);
+
+        window.addEventListener('keydown', (e) => {
+            if(!gameActive) return;
+            if(e.key.startsWith('Arrow') || 'wsadWSAD'.includes(e.key)) {
+                keys[e.key] = true;
+                if(e.key.toLowerCase() === 'w') keys.ArrowUp = true;
+                if(e.key.toLowerCase() === 's') keys.ArrowDown = true;
+                if(e.key.toLowerCase() === 'a') keys.ArrowLeft = true;
+                if(e.key.toLowerCase() === 'd') keys.ArrowRight = true;
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            if(!gameActive) return;
+            if(e.key.startsWith('Arrow') || 'wsadWSAD'.includes(e.key)) {
+                keys[e.key] = false;
+                if(e.key.toLowerCase() === 'w') keys.ArrowUp = false;
+                if(e.key.toLowerCase() === 's') keys.ArrowDown = false;
+                if(e.key.toLowerCase() === 'a') keys.ArrowLeft = false;
+                if(e.key.toLowerCase() === 'd') keys.ArrowRight = false;
+            }
+        });
+
+        // 搖桿邏輯
+        const joystickZone = document.getElementById('joystick-zone');
+        const joystickKnob = document.getElementById('joystick-knob');
+        let joystickCenter = { x: 0, y: 0 };
+        const joystickRadius = 60;
+
+        joystickZone.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const rect = joystickZone.getBoundingClientRect();
+            joystickCenter = { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+            updateJoystick(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+        }, { passive: false });
+
+        joystickZone.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            updateJoystick(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+        }, { passive: false });
+
+        const endJoystick = (e) => {
+            e.preventDefault();
+            joystick.active = false;
+            joystick.x = 0; joystick.y = 0;
+            joystickKnob.style.transform = `translate(-50%, -50%)`;
+        };
+        joystickZone.addEventListener('touchend', endJoystick);
+        joystickZone.addEventListener('touchcancel', endJoystick);
+
+        function updateJoystick(clientX, clientY) {
+            let dx = clientX - joystickCenter.x;
+            let dy = clientY - joystickCenter.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist > joystickRadius) {
+                const angle = Math.atan2(dy, dx);
+                dx = Math.cos(angle) * joystickRadius;
+                dy = Math.sin(angle) * joystickRadius;
+            }
+            joystickKnob.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+            joystick.active = true;
+            joystick.x = dx / joystickRadius;
+            joystick.y = dy / joystickRadius;
+        }
+
+        // --- 遊戲核心邏輯 ---
+
+        function initClouds() {
+            clouds = [];
+            for(let i=0; i<15; i++) {
+                clouds.push({
+                    x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+                    radius: 40 + Math.random() * 80, speed: 0.1 + Math.random() * 0.4, opacity: 0.2 + Math.random() * 0.3
+                });
+            }
+        }
+
+        window.startGame = function() {
+            currentLevelIndex = 0;
+            startLevel();
+        }
+
+        function startLevel() {
+            const level = LEVELS[currentLevelIndex];
+            levelTimeRemaining = level.duration;
+            obstacleTimer = 0;
+            obstacles = [];
+            particles = [];
+            player.x = canvas.width / 2;
+            player.y = canvas.height / 2;
+            player.vx = 0; player.vy = 0;
+            gameState = 'PLAYING';
+            
+            levelDisplay.textContent = `關卡: ${currentLevelIndex + 1} - ${level.name}`;
+            startScreen.classList.add('hidden');
+            levelScreen.classList.add('hidden');
+            gameOverScreen.classList.add('hidden');
+            victoryScreen.classList.add('hidden');
+            lastTime = performance.now();
+        }
+
+        window.nextLevel = function() {
+            currentLevelIndex++;
+            if(currentLevelIndex >= LEVELS.length) {
+                gameState = 'VICTORY';
+                levelScreen.classList.add('hidden');
+                victoryScreen.classList.remove('hidden');
+            } else {
+                startLevel();
+            }
+        }
+
+        window.restartGame = function() { startGame(); }
+
+        function spawnObstacle(level) {
+            let type = level.type;
+            if (type === 'mixed') type = Math.random() > 0.5 ? 'falling' : 'chaser';
+            const angle = Math.random() * Math.PI * 2;
+            const dist = Math.max(canvas.width, canvas.height) / 1.5;
+            const obs = {
+                x: platformCenter.x + Math.cos(angle) * dist,
+                y: platformCenter.y + Math.sin(angle) * dist,
+                radius: 15 + Math.random() * 15,
+                color: type === 'chaser' ? '#FFD700' : '#8c9eff',
+                vx: 0, vy: 0, type: type
+            };
+
+            if (type === 'falling') {
+                const targetX = platformCenter.x + (Math.random() - 0.5) * level.platformRadius;
+                const targetY = platformCenter.y + (Math.random() - 0.5) * level.platformRadius;
+                const a = Math.atan2(targetY - obs.y, targetX - obs.x);
+                const s = level.obstacleSpeed * (0.8 + Math.random() * 0.4);
+                obs.vx = Math.cos(a) * s; obs.vy = Math.sin(a) * s;
+            } 
+            obstacles.push(obs);
+        }
+
+        function update(dt) {
+            if(gameState !== 'PLAYING') return;
+            const level = LEVELS[currentLevelIndex];
+            const time = Date.now() / 1000;
+            
+            // Platform Sway
+            const swayX = Math.sin(time * 0.7) * (20 + currentLevelIndex * 5);
+            const swayY = Math.cos(time * 0.5) * (12 + currentLevelIndex * 3);
+            let jitterX = 0, jitterY = 0;
+            if (level.windForce > 0.1) {
+                jitterX = (Math.random()-0.5) * level.windForce * 4;
+                jitterY = (Math.random()-0.5) * level.windForce * 4;
+            }
+            platformCenter.x = (canvas.width / 2) + swayX + jitterX;
+            platformCenter.y = (canvas.height / 2) + swayY + jitterY;
+
+            levelTimeRemaining -= dt / 1000;
+            timeDisplay.textContent = `時間: ${Math.ceil(levelTimeRemaining)}s`;
+            if (levelTimeRemaining <= 0) {
+                gameState = 'LEVEL_TRANSITION';
+                levelMessage.textContent = `${level.name} 完成！準備下一關...`;
+                levelScreen.classList.remove('hidden');
+                return;
+            }
+
+            if (level.spawnRate > 0) {
+                obstacleTimer += dt;
+                if (obstacleTimer > level.spawnRate) { spawnObstacle(level); obstacleTimer = 0; }
+            }
+
+            // Player Physics
+            let inputX = 0, inputY = 0;
+            if (keys.ArrowUp) inputY -= 1;
+            if (keys.ArrowDown) inputY += 1;
+            if (keys.ArrowLeft) inputX -= 1;
+            if (keys.ArrowRight) inputX += 1;
+            if (joystick.active) { inputX = joystick.x; inputY = joystick.y; }
+
+            const mag = Math.sqrt(inputX*inputX + inputY*inputY);
+            if (mag > 1) { inputX /= mag; inputY /= mag; }
+            
+            player.vx += inputX * player.speed; player.vy += inputY * player.speed;
+            
+            if (level.windForce > 0) {
+                const wa = Math.sin(time) * Math.PI;
+                player.vx += Math.cos(wa) * level.windForce;
+                player.vy += Math.sin(wa) * level.windForce;
+            }
+            
+            player.vx *= player.friction; player.vy *= player.friction;
+            player.x += player.vx; player.y += player.vy;
+
+            // Fall Check
+            const dist = Math.sqrt((player.x - platformCenter.x)**2 + (player.y - platformCenter.y)**2);
+            if (dist > level.platformRadius + player.radius) {
+                gameState = 'GAME_OVER';
+                document.getElementById('final-score').textContent = `存活至: 第 ${currentLevelIndex + 1} 關`;
+                gameOverScreen.classList.remove('hidden');
+            }
+
+            // Obstacles
+            obstacles.forEach((obs, idx) => {
+                if(obs.type === 'chaser') {
+                    const a = Math.atan2(player.y - obs.y, player.x - obs.x);
+                    obs.vx += Math.cos(a) * 0.1; obs.vy += Math.sin(a) * 0.1;
+                    const s = Math.sqrt(obs.vx*obs.vx + obs.vy*obs.vy);
+                    if(s > level.obstacleSpeed) { obs.vx = (obs.vx/s)*level.obstacleSpeed; obs.vy = (obs.vy/s)*level.obstacleSpeed; }
+                }
+                obs.x += obs.vx; obs.y += obs.vy;
+
+                // Collision
+                const dx = player.x - obs.x, dy = player.y - obs.y;
+                if (Math.sqrt(dx*dx + dy*dy) < player.radius + obs.radius) {
+                    const angle = Math.atan2(dy, dx);
+                    player.vx += Math.cos(angle)*10; player.vy += Math.sin(angle)*10;
+                    obs.vx -= Math.cos(angle)*10; obs.vy -= Math.sin(angle)*10;
+                }
+                // Cleanup
+                if (obs.type === 'falling' && Math.sqrt((obs.x-platformCenter.x)**2) > canvas.width) obstacles.splice(idx, 1);
+            });
+
+            // Clouds & Particles
+            clouds.forEach(c => { c.x -= c.speed; if(c.x < -c.radius) c.x = canvas.width + c.radius; });
+            for(let i=particles.length-1; i>=0; i--) {
+                particles[i].x += particles[i].vx; particles[i].y += particles[i].vy;
+                particles[i].life -= 0.05; if(particles[i].life <= 0) particles.splice(i, 1);
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const cx = platformCenter.x, cy = platformCenter.y;
+            const level = LEVELS[currentLevelIndex] || LEVELS[0];
+
+            // Background
+            clouds.forEach(c => { ctx.fillStyle = `rgba(255,255,255,${c.opacity})`; ctx.beginPath(); ctx.arc(c.x, c.y, c.radius, 0, Math.PI*2); ctx.fill(); });
+
+            // Platform
+            const sideGrad = ctx.createLinearGradient(cx - level.platformRadius, cy, cx + level.platformRadius, cy);
+            sideGrad.addColorStop(0, '#555'); sideGrad.addColorStop(0.5, '#999'); sideGrad.addColorStop(1, '#555');
+            ctx.fillStyle = sideGrad; ctx.beginPath();
+            ctx.ellipse(cx, cy + PLATFORM_THICKNESS, level.platformRadius, level.platformRadius * VIEW_SCALE_Y, 0, 0, Math.PI * 2);
+            ctx.fillRect(cx - level.platformRadius, cy, level.platformRadius * 2, PLATFORM_THICKNESS); ctx.fill();
+
+            const surfGrad = ctx.createRadialGradient(cx, cy - level.platformRadius*0.5, 10, cx, cy, level.platformRadius);
+            surfGrad.addColorStop(0, '#fff'); surfGrad.addColorStop(1, '#a0a0a0');
+            ctx.fillStyle = surfGrad; ctx.beginPath();
+            ctx.ellipse(cx, cy, level.platformRadius, level.platformRadius * VIEW_SCALE_Y, 0, 0, Math.PI * 2); ctx.fill();
+            
+            // Grid
+            ctx.save(); ctx.beginPath(); ctx.ellipse(cx, cy, level.platformRadius, level.platformRadius * VIEW_SCALE_Y, 0, 0, Math.PI*2); ctx.clip();
+            ctx.strokeStyle = 'rgba(0,0,0,0.1)';
+            for(let i=-canvas.width; i<canvas.width; i+=40) {
+                ctx.beginPath(); ctx.moveTo(i + (cx%40), cy-level.platformRadius); ctx.lineTo(i+(cx%40), cy+level.platformRadius+PLATFORM_THICKNESS); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(cx-level.platformRadius, cy+(i%(level.platformRadius*2))*VIEW_SCALE_Y); ctx.lineTo(cx+level.platformRadius, cy+(i%(level.platformRadius*2))*VIEW_SCALE_Y); ctx.stroke();
+            }
+            ctx.restore();
+
+            // Entities
+            if(gameState === 'PLAYING' || gameState === 'LEVEL_TRANSITION') {
+                let renderList = [{type:'player', obj:player}, ...obstacles.map(o=>({type:'obstacle', obj:o}))];
+                renderList.sort((a,b) => a.obj.y - b.obj.y);
+
+                renderList.forEach(item => {
+                    const obj = item.obj;
+                    const drawX = cx + (obj.x - cx);
+                    const drawY = cy + (obj.y - cy) * VIEW_SCALE_Y;
+                    const scY = drawY - obj.radius;
+                    
+                    // Shadow
+                    ctx.fillStyle = 'rgba(0,0,0,0.2)'; ctx.beginPath();
+                    ctx.ellipse(drawX, drawY, obj.radius, obj.radius*VIEW_SCALE_Y, 0, 0, Math.PI*2); ctx.fill();
+
+                    // Sphere
+                    ctx.beginPath(); ctx.arc(drawX, scY, obj.radius, 0, Math.PI*2); ctx.fillStyle = obj.color; ctx.fill();
+                    const g = ctx.createRadialGradient(drawX-obj.radius/3, scY-obj.radius/3, 2, drawX, scY, obj.radius);
+                    g.addColorStop(0, 'rgba(255,255,255,0.9)'); g.addColorStop(0.5, 'rgba(255,255,255,0)');
+                    ctx.fillStyle = g; ctx.fill();
+
+                    if(item.type === 'player') {
+                         ctx.fillStyle = 'white';
+                         ctx.beginPath(); ctx.arc(drawX-5, scY-3, 5, 0, Math.PI*2); ctx.fill();
+                         ctx.beginPath(); ctx.arc(drawX+5, scY-3, 5, 0, Math.PI*2); ctx.fill();
+                         ctx.fillStyle = 'black';
+                         const lx = player.vx*1.5, ly = player.vy*1.5;
+                         ctx.beginPath(); ctx.arc(drawX-5+lx, scY-3+ly, 2.5, 0, Math.PI*2); ctx.fill();
+                         ctx.beginPath(); ctx.arc(drawX+5+lx, scY-3+ly, 2.5, 0, Math.PI*2); ctx.fill();
+                    }
+                });
+            }
+        }
+
+        function loop(timestamp) {
+            if(!gameActive) return;
+            const dt = timestamp - lastTime;
+            lastTime = timestamp;
+            update(dt);
+            draw();
+            animationId = requestAnimationFrame(loop);
+        }
+
+    </script>
+</body>
+</html>
