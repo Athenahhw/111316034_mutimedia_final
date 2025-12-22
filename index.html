@@ -135,13 +135,12 @@
         .fade-in-up.visible { opacity: 1; transform: translateY(0); }
 
         /* --- 2. GAME SPECIFIC STYLES --- */
-        /* 將遊戲樣式隔離在 #game-wrapper 內，避免影響網頁其他部分 */
         #game-wrapper {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 3000; /* 比 Navbar 和普通 Modal 更高 */
+            z-index: 3000;
             background: linear-gradient(to bottom, #87CEFA 0%, #E0F7FA 100%);
-            display: none; /* 預設隱藏 */
+            display: none;
             opacity: 0;
             transition: opacity 0.5s;
         }
@@ -166,7 +165,7 @@
             text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
         }
 
-        /* 遊戲內覆蓋層 (開始/結束畫面) */
+        /* 遊戲內覆蓋層 */
         .game-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.6);
@@ -176,7 +175,6 @@
         
         .game-overlay.hidden { display: none !important; }
 
-        /* 遊戲專用按鈕 */
         .game-btn {
             background: linear-gradient(45deg, #11998e, #38ef7d);
             border: none; padding: 15px 40px; color: white; font-size: 1.5rem;
@@ -190,7 +188,6 @@
         .game-overlay h1 { font-size: 3rem; text-shadow: 0 5px 15px rgba(0,0,0,0.5); margin-bottom: 20px; text-align: center; }
         .game-overlay p { font-size: 1.2rem; max-width: 600px; text-align: center; line-height: 1.6; margin-bottom: 20px; color: #eee; }
 
-        /* 離開遊戲按鈕 */
         .exit-game-btn {
             position: absolute; top: 20px; right: 20px; z-index: 50;
             background: rgba(0,0,0,0.5); color: white; border: 1px solid rgba(255,255,255,0.3);
@@ -199,7 +196,6 @@
         }
         .exit-game-btn:hover { background: rgba(255, 0, 0, 0.6); }
 
-        /* 虛擬搖桿 */
         #joystick-zone {
             position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%);
             width: 120px; height: 120px; background: rgba(0, 0, 0, 0.1);
@@ -222,7 +218,6 @@
             }
             .nav-links.active { transform: translateY(0); }
             
-            /* 遊戲手機版適配 */
             #joystick-zone { display: block; }
             .game-overlay h1 { font-size: 2rem; }
             .game-btn { padding: 10px 30px; font-size: 1.2rem; }
@@ -284,32 +279,49 @@
                 
                 <div class="grid-3">
                     
-                    <a href="https://youtube.com/shorts/x_UyCo6uRwE?feature=share" target="_blank" class="project-card fade-in-up">
-                        <div class="icon-cover">
-                            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    <div class="project-card fade-in-up" style="cursor: default;">
+                        <div style="width: 100%; height: 350px; background: #000;">
+                            <iframe 
+                                width="100%" 
+                                height="100%" 
+                                src="https://www.youtube.com/embed/x_UyCo6uRwE" 
+                                title="期中報告 Vlog" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                allowfullscreen>
+                            </iframe>
                         </div>
                         <div class="project-info">
                             <h3>期中報告 Vlog</h3>
-                            <p class="project-desc">點擊觀看我們的期中報告影片。使用 Suno 生成配樂，紀錄四位朋友的一日生活。</p>
+                            <p class="project-desc">使用 Suno 生成配樂，紀錄四位朋友的一日生活。</p>
                             <div class="project-tags">
                                 <span class="tag">YouTube</span>
                                 <span class="tag">Vlog</span>
                             </div>
                         </div>
-                    </a>
-                    <a href="https://youtu.be/iW419OcUGxA" target="_blank" class="project-card fade-in-up">
-                        <div class="icon-cover">
-                            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+
+                    <div class="project-card fade-in-up" style="cursor: default;">
+                        <div style="width: 100%; height: 200px; background: #000;">
+                            <iframe 
+                                width="100%" 
+                                height="100%" 
+                                src="https://www.youtube.com/embed/iW419OcUGxA" 
+                                title="快樂小狗狗" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                allowfullscreen>
+                            </iframe>
                         </div>
                         <div class="project-info">
                             <h3>快樂小狗狗</h3>
-                            <p class="project-desc">點擊觀看快樂小狗影片，利用Flow AI 製成</p>
+                            <p class="project-desc">利用 Flow AI 製成。</p>
                             <div class="project-tags">
                                 <span class="tag">YouTube</span>
                                 <span class="tag">Puppy</span>
                             </div>
                         </div>
-                    </a>
+                    </div>
 
                     <div class="project-card fade-in-up" onclick="openGameModal()">
                         <div class="icon-cover" style="background: linear-gradient(135deg, #87CEEB, #E0F7FA);">
